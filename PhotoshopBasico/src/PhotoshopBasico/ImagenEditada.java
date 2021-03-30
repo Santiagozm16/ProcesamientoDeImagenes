@@ -649,4 +649,159 @@ public class ImagenEditada {
         return moda;
     
     }
+    
+    public void TresPorTres(int pos1, int pos2, int pos3){
+        double filtro [][] = new double [3][3];
+        filtro[0][0] = pos1;//Entrada teclado
+        filtro[0][1] = pos2;//Entrada teclado
+        filtro[0][2] = pos3;//Entrada teclado
+        filtro[1][0] = pos2;//Entrada teclado
+        filtro[1][1] = filtro[0][1]*filtro[1][0];
+        filtro[1][2] = filtro[1][0]*filtro[0][2];
+        filtro[2][0] = pos1;//Entrada teclado
+        filtro[2][1] = filtro[2][0]*filtro[0][1];
+        filtro[2][2] = filtro[2][0]*filtro[2][2];
+        
+        int divisor = (int)(filtro[0][0]+filtro[0][1]+filtro[0][2]);
+        divisor = divisor*divisor;
+        
+        for(int i = 0; i<filtro.length;i++){
+            for(int j = 0; j<filtro[0].length; j++){
+                filtro[i][j] = filtro[i][j]/divisor;
+            }
+        }
+        
+        int height= ImgTemp.getHeight(); 
+        int width= ImgTemp.getWidth();
+        int color = 0;
+        int colorR = 0;
+        int [][] imagenSalida = new int [height][width];
+        int aux;
+        for (int x = 0; x<height; x++){
+            for(int y = 0; y<width; y++){
+                color = ImgTemp.getRGB(y,x);
+                colorR = (color >> 16) & 0xff;
+                imagenSalida[x][y] = colorR;
+            }
+        }
+        int ColorFinal = 0;
+        ImagenEditada call = new ImagenEditada();
+        double MatrizSalida [][] = new double [imagenSalida.length][imagenSalida[0].length];
+        for(int i =  0; i<imagenSalida.length; i++){
+            for(int j = 0; j<imagenSalida[0].length; j ++){
+                MatrizSalida[i][j] = call.Convolucionador(i, j, imagenSalida, filtro);
+                aux = (int) MatrizSalida[i][j];
+                System.out.print(aux +"\n");
+                ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
+                ImgTemp.setRGB(j, i, ColorFinal);
+            }
+        }    
+    }
+    
+    public double Convolucionador(int i, int j, int imagen[][], double filtro[][]){
+        int []auxiliar = new int[9];
+        int x,y;
+        double valor = 0;
+        for(int k = 0; k<=auxiliar.length;k++){
+                    switch(k){
+                        case 0:
+                            x=i-1;
+                            y=j-1;
+                            if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 1:
+                            x=i-1;
+                            y=j;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 2:
+                            x=i-1;
+                            y=j+1;
+                            if(x<0 || y < 0 || x>=imagen.length || y>=imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 3:
+                            x=i;
+                            y=j-1;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 4:
+                            x=i;
+                            y=j;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 5:
+                            x=i;
+                            y=j+1;
+                            if(x<0 || y < 0 || x >= imagen.length || y >= imagen[0].length){
+                                auxiliar[k]=0; 
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];
+                            }
+                        break;
+                        case 6:
+                            x=i+1;
+                            y=j-1;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 7:
+                            x=i+1;
+                            y=j;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 8:
+                            x=i+1;
+                            y=j+1;
+                            if(x<0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                                auxiliar[k]=0;
+                            }
+                            else{
+                                auxiliar[k]=imagen[x][y];   
+                            }
+                        break;
+                        case 9:
+                            valor = auxiliar[0]*filtro[2][2]+auxiliar[1]*filtro[2][1]+auxiliar[2]*filtro[2][0]+auxiliar[3]*filtro[1][2]+auxiliar[4]*filtro[1][1]+auxiliar[5]*filtro[1][0]+auxiliar[6]*filtro[0][2]+auxiliar[7]*filtro[0][1]+auxiliar[8]*filtro[0][0];
+                            //System.out.print("El mayor es " + mayor + "\n ");
+                        break;
+                        default:
+                            System.out.print("F");
+                    }
+                }
+    return valor;
+    }
 }
