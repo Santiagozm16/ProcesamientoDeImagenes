@@ -853,7 +853,6 @@ public class ImagenEditada {
             for(int j = 0; j<imagenSalida[0].length; j ++){
                 MatrizSalida[i][j] = call.Convolucionador(i, j, imagenSalida, filtroGaussiano);
                 aux = (int) MatrizSalida[i][j];
-                System.out.print(aux +"\n");
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
