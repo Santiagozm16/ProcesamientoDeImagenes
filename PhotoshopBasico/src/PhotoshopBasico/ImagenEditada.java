@@ -804,4 +804,84 @@ public class ImagenEditada {
                 }
     return valor;
     }
+   public void FiltroGaussiano(double num){
+        
+        double sigma = num;
+        double normal = 0;
+        double gaus = 0;
+        double op = 0;
+        double [][] filtroGaussiano = new double [3][3];
+        for(int x = -1; x < 2; x++ ){
+            for(int y = -1; y < 2; y++ ){
+                normal = (1/(Math.pow(sigma,2)*2*Math.PI));
+                op = (-(Math.pow(x, 2) + Math.pow(y, 2))/(2*Math.pow(sigma,2)));
+                gaus =  Math.exp(op);
+                filtroGaussiano[x+1][y+1] = normal*gaus;
+            }
+        }
+        
+        double suma = 0;
+        for(int i = 0; i< filtroGaussiano.length;i++){
+            for(int j = 0; j < filtroGaussiano[0].length; j++){
+                suma = (suma + filtroGaussiano[i][j]);
+            }
+        }
+        
+        for(int i = 0; i< filtroGaussiano.length;i++){
+            for(int j = 0; j < filtroGaussiano[0].length; j++){
+                filtroGaussiano[i][j] = filtroGaussiano[i][j]/suma;
+            }
+        }
+        
+        int height= ImgTemp.getHeight(); 
+        int width= ImgTemp.getWidth();
+        int color = 0;
+        int colorR = 0;
+        int [][] imagenSalida = new int [height][width];
+        int aux;
+        for (int x = 0; x<height; x++){
+            for(int y = 0; y<width; y++){
+                color = ImgTemp.getRGB(y,x);
+                colorR = (color >> 16) & 0xff;
+                imagenSalida[x][y] = colorR;
+            }
+        }
+        int ColorFinal = 0;
+        ImagenEditada call = new ImagenEditada();
+        double MatrizSalida [][] = new double [imagenSalida.length][imagenSalida[0].length];
+        for(int i =  0; i<imagenSalida.length; i++){
+            for(int j = 0; j<imagenSalida[0].length; j ++){
+                MatrizSalida[i][j] = call.Convolucionador(i, j, imagenSalida, filtroGaussiano);
+                aux = (int) MatrizSalida[i][j];
+                ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
+                ImgTemp.setRGB(j, i, ColorFinal);
+            }
+        }    
+    }
+     
+    public double ConvolucionadorGaussiano(int i0, int j0, int imagen[][], double filtro[][]){
+        int x,y, menor = 0;
+        int k = 0;
+        double valor = 0;
+        int []auxiliar = new int[9];
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    x=i0+(i);
+                    y=j0+(j);
+                    if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                        auxiliar[k]=0;                               
+                    }
+                    else{
+                        auxiliar[k]=imagen[x][y]; 
+                    }
+                k++;
+            }      
+        }
+        for(int i = 0; i <filtro.length; i++){
+            for(int j = 0; j <filtro.length; j++){
+                valor = valor + (auxiliar[j]*filtro[i][j]);
+            }      
+        }
+     return valor;
+    }
 }
