@@ -535,8 +535,16 @@ public class EditorImagenes extends javax.swing.JFrame {
         ImgEdit.TresPorTres(a, b, c);
     }
     
+    //Gaussiano
     private void Gaussiano(double num){
         ImgEdit.FiltroGaussiano(num);
+    }
+    
+    //Filtro 5x5
+    
+    private void Cinco(){
+        
+        ImgEdit.CincoPorCinco();
     }
     private void jMI_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMI_OpenActionPerformed
         // TODO add your handling code here:
@@ -643,6 +651,8 @@ public class EditorImagenes extends javax.swing.JFrame {
 
     private void convolucion5Filtro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convolucion5Filtro3ActionPerformed
         // TODO add your handling code here:
+        Cinco();
+        MostrarImagenEditada(ImgUso= Clon.clone(ImgEdit.getImagen()));
     }//GEN-LAST:event_convolucion5Filtro3ActionPerformed
 
     private void convolucion7Filtro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convolucion7Filtro3ActionPerformed
