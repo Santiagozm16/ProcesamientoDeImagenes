@@ -861,33 +861,6 @@ public class ImagenEditada {
         }    
     }
      
-    public double ConvolucionadorGaussiano(int i0, int j0, int imagen[][], double filtro[][]){
-        int x,y, menor = 0;
-        int k = 0;
-        double valor = 0;
-        int []auxiliar = new int[9];
-            for(int i = -1; i < 2; i++){
-                for(int j = -1; j < 2; j++){
-                    x=i0+(i);
-                    y=j0+(j);
-                    if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
-                        auxiliar[k]=0;                               
-                    }
-                    else{
-                        auxiliar[k]=imagen[x][y]; 
-                    }
-                k++;
-            }      
-        }
-        for(int i = 0; i <filtro.length; i++){
-            for(int j = 0; j <filtro.length; j++){
-                valor = valor + (auxiliar[j]*filtro[i][j]);
-                System.out.print(j+i);
-            }      
-        }
-     return valor;
-    }
-    
     public void CincoPorCinco(){
         int height= ImgTemp.getHeight(); 
         int width= ImgTemp.getWidth();
@@ -904,31 +877,31 @@ public class ImagenEditada {
         }
         double [][] Filtro = new double [5][5];
         
-        Filtro[0][0]=(double)1/256;
-        Filtro[0][1]=(double)4/256;
-        Filtro[0][2]=(double)6/256;
-        Filtro[0][3]=(double)4/256;
-        Filtro[0][4]=(double)1/256;
-        Filtro[1][0]=(double)4/256;
-        Filtro[1][1]=(double)16/256;
-        Filtro[1][2]=(double)24/256;
-        Filtro[1][3]=(double)16/256;
-        Filtro[1][4]=(double)4/256;
-        Filtro[2][0]=(double)6/256;
-        Filtro[2][1]=(double)24/256;
-        Filtro[2][2]=(double)36/256;
-        Filtro[2][3]=(double)24/256;
-        Filtro[2][4]=(double)6/256;
-        Filtro[3][0]=(double)4/256;
-        Filtro[3][1]=(double)16/256;
-        Filtro[3][2]=(double)24/256;
-        Filtro[3][3]=(double)16/256;
-        Filtro[3][4]=(double)4/256;
-        Filtro[4][0]=(double)1/256;
-        Filtro[4][1]=(double)4/256;
-        Filtro[4][2]=(double)6/256;
-        Filtro[4][3]=(double)4/256;
-        Filtro[4][4]=(double)1/256;
+        Filtro[0][0]=1/256.;
+        Filtro[0][1]=4/256.;
+        Filtro[0][2]=6/256.;
+        Filtro[0][3]=4/256.;
+        Filtro[0][4]=1/256.;
+        Filtro[1][0]=4/256.;
+        Filtro[1][1]=16/256.;
+        Filtro[1][2]=24/256.;
+        Filtro[1][3]=16/256.;
+        Filtro[1][4]=4/256.;
+        Filtro[2][0]=6/256.;
+        Filtro[2][1]=24/256.;
+        Filtro[2][2]=36/256.;
+        Filtro[2][3]=24/256.;
+        Filtro[2][4]=6/256.;
+        Filtro[3][0]=4/256.;
+        Filtro[3][1]=16/256.;
+        Filtro[3][2]=24/256.;
+        Filtro[3][3]=16/256.;
+        Filtro[3][4]=4/256.;
+        Filtro[4][0]=1/256.;
+        Filtro[4][1]=4/256.;
+        Filtro[4][2]=6/256.;
+        Filtro[4][3]=4/256.;
+        Filtro[4][4]=1/256.;
         
         ImagenEditada call = new ImagenEditada();
         int ColorFinal = 0;
@@ -948,6 +921,73 @@ public class ImagenEditada {
         int []auxiliar = new int[25];
             for(int i = -2; i < 3; i++){
                 for(int j = -2; j < 3; j++){
+                    x=i0+(i);
+                    y=j0+(j);
+                    if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                        auxiliar[k]=0;                               
+                    }
+                    else{
+                        auxiliar[k]=imagen[x][y]; 
+                    }
+                k++;
+            }      
+        }
+        k=0;
+        double aux2;
+        for(int i = 0; i <filtro.length; i++){
+            for(int j = 0; j <filtro.length; j++){
+                aux2 = auxiliar[k]*filtro[i][j];
+                valor = valor + aux2;
+                k++;  
+            }      
+        }
+     return valor;
+    }
+    
+    public void NuevePorNueve(){
+        int height= ImgTemp.getHeight(); 
+        int width= ImgTemp.getWidth();
+        int color = 0;
+        int colorR = 0;
+        int [][] imagenSalida = new int [height][width];
+        int aux;
+        for (int x = 0; x<height; x++){
+            for(int y = 0; y<width; y++){
+                color = ImgTemp.getRGB(y,x);
+                colorR = (color >> 16) & 0xff;
+                imagenSalida[x][y] = colorR;
+            }
+        }
+        double [][] Filtro = {
+            {1/65536.,8/65536., 28/65536., 56/65536., 70/65536., 56/65536.,28/65536.,8/65536.,1/65536.},
+            {8/65536.,64/65536.,224/65536.,448/65536.,560/65536.,448/65536.,224/65536.,64/65536.,8/65536.},
+            {28/65536.,224/65536.,784/65536.,1568/65536.,1960/65536.,1568/65536.,784/65536.,224/65536.,28/65536.},            
+            {56/65536.,448/65536.,1568/65536.,3136/65536.,3920/65536.,3136/65536.,1568/65536.,448/65536.,56/65536.}, 
+            {70/65536.,560/65536.,1960/65536.,3920/65536.,4900/65536.,3920/65536.,1960/65536.,560/65536.,70/65536.},
+            {56/65536.,448/65536.,1568/65536.,3136/65536.,3920/65536.,3136/65536.,1568/65536.,448/65536.,56/65536.},
+            {28/65536.,224/65536.,784/65536.,1568/65536.,1960/65536.,1568/65536.,784/65536.,224/65536.,28/65536.}, 
+            {8/65536.,64/65536.,224/65536.,448/65536.,560/65536.,448/65536.,224/65536.,64/65536.,8/65536.},
+            {1/65536.,8/65536., 28/65536., 56/65536., 70/65536.,56/65536.,28/65536.,8/65536.,1/65536.}
+        };
+        
+        ImagenEditada call = new ImagenEditada();
+        int ColorFinal = 0;
+        for(int i=0; i<height; i++){
+            for(int j=0;j<width;j++){
+                aux = (int) call.Convolucionador3(i, j, imagenSalida, Filtro); 
+                ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
+                ImgTemp.setRGB(j, i, ColorFinal);
+            }
+        }    
+    }
+    
+    public double Convolucionador3(int i0, int j0, int imagen[][], double filtro[][]){
+        int x,y;
+        int k = 0;
+        double valor = 0;
+        int []auxiliar = new int[81];
+            for(int i = -4; i < 5; i++){
+                for(int j = -4; j < 5; j++){
                     x=i0+(i);
                     y=j0+(j);
                     if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){

@@ -546,6 +546,12 @@ public class EditorImagenes extends javax.swing.JFrame {
         
         ImgEdit.CincoPorCinco();
     }
+    
+    //Filtro 9x9
+    private void Nueve(){
+        
+        ImgEdit.NuevePorNueve();
+    }
     private void jMI_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMI_OpenActionPerformed
         // TODO add your handling code here:
     ImgOriginal=AbrirImagen();
@@ -661,6 +667,8 @@ public class EditorImagenes extends javax.swing.JFrame {
 
     private void convolucion9Filtro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convolucion9Filtro3ActionPerformed
         // TODO add your handling code here:
+        Nueve();
+        MostrarImagenEditada(ImgUso= Clon.clone(ImgEdit.getImagen()));
     }//GEN-LAST:event_convolucion9Filtro3ActionPerformed
 
     private void sigma2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sigma2ActionPerformed
