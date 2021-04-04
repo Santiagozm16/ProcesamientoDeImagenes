@@ -546,6 +546,11 @@ public class EditorImagenes extends javax.swing.JFrame {
         
         ImgEdit.CincoPorCinco();
     }
+        //Filtro 7x7
+    private void Siete(){
+        
+        ImgEdit.SietePorSiete();
+    }
     
     //Filtro 9x9
     private void Nueve(){
@@ -663,6 +668,8 @@ public class EditorImagenes extends javax.swing.JFrame {
 
     private void convolucion7Filtro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convolucion7Filtro3ActionPerformed
         // TODO add your handling code here:
+        Siete();
+        MostrarImagenEditada(ImgUso= Clon.clone(ImgEdit.getImagen()));
     }//GEN-LAST:event_convolucion7Filtro3ActionPerformed
 
     private void convolucion9Filtro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convolucion9Filtro3ActionPerformed
