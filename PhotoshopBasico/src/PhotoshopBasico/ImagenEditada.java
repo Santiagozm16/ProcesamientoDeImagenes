@@ -207,14 +207,14 @@ public class ImagenEditada {
         for(int i=0; i<height; i++){
             for(int j=0;j<width;j++){
                 //System.out.print(" " + imagen[i][j]+ " ");
-                aux = call.selector(i, j, imagenSalida);
+                aux = call.selectorMaximo(i, j, imagenSalida);
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
         }
     }
     
-    public int selector(int i, int j, int imagen[][]){
+    public int selectorMaximo(int i, int j, int imagen[][]){
         int []auxiliar = new int[9];
         int x,y, mayor = 0;
         for(int k = 0; k<=auxiliar.length;k++){
@@ -344,7 +344,7 @@ public class ImagenEditada {
         for(int i=0; i<imagenSalida.length; i++){
             for(int j=0;j<imagenSalida[0].length;j++){
                 //System.out.print(" " + imagen[i][j]+ " ");
-                aux = call.selector2(i, j, imagenSalida);
+                aux = call.selectorMediana(i, j, imagenSalida);
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
@@ -352,7 +352,7 @@ public class ImagenEditada {
         }
     }
     
-    public int selector2(int i, int j, int imagen[][]){
+    public int selectorMediana(int i, int j, int imagen[][]){
         int []auxiliar = new int[9];
         int x,y, mediana = 0;
         for(int k = 0; k<=auxiliar.length;k++){
@@ -690,7 +690,7 @@ public class ImagenEditada {
         double MatrizSalida [][] = new double [imagenSalida.length][imagenSalida[0].length];
         for(int i =  0; i<imagenSalida.length; i++){
             for(int j = 0; j<imagenSalida[0].length; j ++){
-                MatrizSalida[i][j] = call.Convolucionador(i, j, imagenSalida, filtro);
+                MatrizSalida[i][j] = call.Convolucionador3x3(i, j, imagenSalida, filtro);
                 aux = (int) MatrizSalida[i][j];
                 //System.out.print(aux +"\n");
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
@@ -699,7 +699,7 @@ public class ImagenEditada {
         }    
     }
     
-    public double Convolucionador(int i, int j, int imagen[][], double filtro[][]){
+    public double Convolucionador3x3(int i, int j, int imagen[][], double filtro[][]){
         int []auxiliar = new int[9];
         int x,y;
         double valor = 0;
@@ -853,12 +853,39 @@ public class ImagenEditada {
         double MatrizSalida [][] = new double [imagenSalida.length][imagenSalida[0].length];
         for(int i =  0; i<imagenSalida.length; i++){
             for(int j = 0; j<imagenSalida[0].length; j ++){
-                MatrizSalida[i][j] = call.Convolucionador(i, j, imagenSalida, filtroGaussiano);
+                MatrizSalida[i][j] = call.ConvolucionadorGaussiano(i, j, imagenSalida, filtroGaussiano);
                 aux = (int) MatrizSalida[i][j];
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
         }    
+    }
+        public double ConvolucionadorGaussiano(int i0, int j0, int imagen[][], double filtro[][]){
+        int x,y;
+        int k = 0;
+        double valor = 0;
+        int []auxiliar = new int[25];
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    x=i0+(i);
+                    y=j0+(j);
+                    if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                        auxiliar[k]=0;                               
+                    }
+                    else{
+                        auxiliar[k]=imagen[x][y]; 
+                    }
+                k++;
+            }      
+        }
+        k=0;
+        for(int i = 0; i <filtro.length; i++){
+            for(int j = 0; j <filtro.length; j++){
+                valor = valor + (auxiliar[k]*filtro[i][j]);
+                k++;  
+            }      
+        }
+     return valor;
     }
      
     public void CincoPorCinco(){
@@ -907,14 +934,14 @@ public class ImagenEditada {
         int ColorFinal = 0;
         for(int i=0; i<height; i++){
             for(int j=0;j<width;j++){
-                aux = (int) call.Convolucionador2(i, j, imagenSalida, Filtro); 
+                aux = (int) call.Convolucionador5x5(i, j, imagenSalida, Filtro); 
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
         }    
     }
     
-    public double Convolucionador2(int i0, int j0, int imagen[][], double filtro[][]){
+    public double Convolucionador5x5(int i0, int j0, int imagen[][], double filtro[][]){
         int x,y;
         int k = 0;
         double valor = 0;
@@ -943,6 +970,71 @@ public class ImagenEditada {
         }
      return valor;
     }
+    
+    public void SietePorSiete(){
+        int height= ImgTemp.getHeight(); 
+        int width= ImgTemp.getWidth();
+        int color = 0;
+        int colorR = 0;
+        int [][] imagenSalida = new int [height][width];
+        int aux;
+        for (int x = 0; x<height; x++){
+            for(int y = 0; y<width; y++){
+                color = ImgTemp.getRGB(y,x);
+                colorR = (color >> 16) & 0xff;
+                imagenSalida[x][y] = colorR;
+            }
+        }
+        double [][] Filtro = {
+            {1/4096.,6/4096., 15/4096., 20/4096., 15/4096., 6/4096.,1/4096.},
+            {6/4096.,36/4096.,90/4096.,120/4096.,90/4096.,36/4096.,6/4096.},
+            {15/4096.,90/4096.,225/4096.,300/4096.,225/4096.,90/4096.,15/4096.},            
+            {20/4096.,120/4096.,300/4096.,400/4096.,300/4096.,120/4096.,20/4096.}, 
+            {15/4096.,90/4096.,225/4096.,300/4096.,225/4096.,90/4096.,15/4096.},
+            {6/4096.,36/4096.,90/4096.,120/4096.,90/4096.,36/4096.,6/4096.},
+            {1/4096.,6/4096.,15/4096.,20/4096.,15/4096.,6/4096.,1/4096.} 
+        };
+        
+        ImagenEditada call = new ImagenEditada();
+        int ColorFinal = 0;
+        for(int i=0; i<height; i++){
+            for(int j=0;j<width;j++){
+                aux = (int) call.Convolucionador7x7(i, j, imagenSalida, Filtro); 
+                ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
+                ImgTemp.setRGB(j, i, ColorFinal);
+            }
+        }    
+    }
+        public double Convolucionador7x7(int i0, int j0, int imagen[][], double filtro[][]){
+        int x,y;
+        int k = 0;
+        double valor = 0;
+        int []auxiliar = new int[81];
+            for(int i = -3; i < 4; i++){
+                for(int j = -3; j < 4; j++){
+                    x=i0+(i);
+                    y=j0+(j);
+                    if(x < 0 || y < 0 || x>=imagen.length || y>= imagen[0].length){
+                        auxiliar[k]=0;                               
+                    }
+                    else{
+                        auxiliar[k]=imagen[x][y]; 
+                    }
+                k++;
+            }      
+        }
+        k=0;
+        double aux2;
+        for(int i = 0; i <filtro.length; i++){
+            for(int j = 0; j <filtro.length; j++){
+                aux2 = auxiliar[k]*filtro[i][j];
+                valor = valor + aux2;
+                k++;  
+            }      
+        }
+     return valor;
+    }
+
     
     public void NuevePorNueve(){
         int height= ImgTemp.getHeight(); 
@@ -974,14 +1066,14 @@ public class ImagenEditada {
         int ColorFinal = 0;
         for(int i=0; i<height; i++){
             for(int j=0;j<width;j++){
-                aux = (int) call.Convolucionador3(i, j, imagenSalida, Filtro); 
+                aux = (int) call.Convolucionador9x9(i, j, imagenSalida, Filtro); 
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
         }    
     }
     
-    public double Convolucionador3(int i0, int j0, int imagen[][], double filtro[][]){
+    public double Convolucionador9x9(int i0, int j0, int imagen[][], double filtro[][]){
         int x,y;
         int k = 0;
         double valor = 0;
