@@ -653,13 +653,13 @@ public class ImagenEditada {
     
     public void TresPorTres(double pos1, double pos2, double pos3, double pos4, double pos5, double pos6, double pos7, double pos8, double pos9){
         double filtro [][] = new double [3][3];
-        filtro[0][0] = pos1;//Entrada teclado
-        filtro[0][1] = pos2;//Entrada teclado
-        filtro[0][2] = pos3;//Entrada teclado
-        filtro[1][0] = pos4;//Entrada teclado
+        filtro[0][0] = pos1;
+        filtro[0][1] = pos2;
+        filtro[0][2] = pos3;
+        filtro[1][0] = pos4;
         filtro[1][1] = pos5;
         filtro[1][2] = pos6;
-        filtro[2][0] = pos7;//Entrada teclado
+        filtro[2][0] = pos7;
         filtro[2][1] = pos8;
         filtro[2][2] = pos9;
         
@@ -697,7 +697,12 @@ public class ImagenEditada {
             for(int j = 0; j<imagenSalida[0].length; j ++){
                 MatrizSalida[i][j] = call.Convolucionador3x3(i, j, imagenSalida, filtro);
                 aux = (int) MatrizSalida[i][j];
-                //System.out.print(aux +"\n");
+                if(aux < 0){
+                    aux = 0;
+                }
+                if (aux > 255 ){
+                    aux = 255;
+                }
                 ColorFinal =(255 << 24) | (aux << 16) | (aux << 8) | aux;
                 ImgTemp.setRGB(j, i, ColorFinal);
             }
@@ -865,7 +870,8 @@ public class ImagenEditada {
             }
         }    
     }
-        public double ConvolucionadorGaussiano(int i0, int j0, int imagen[][], double filtro[][]){
+    
+    public double ConvolucionadorGaussiano(int i0, int j0, int imagen[][], double filtro[][]){
         int x,y;
         int k = 0;
         double valor = 0;
@@ -1010,7 +1016,8 @@ public class ImagenEditada {
             }
         }    
     }
-        public double Convolucionador7x7(int i0, int j0, int imagen[][], double filtro[][]){
+    
+    public double Convolucionador7x7(int i0, int j0, int imagen[][], double filtro[][]){
         int x,y;
         int k = 0;
         double valor = 0;
@@ -1039,8 +1046,7 @@ public class ImagenEditada {
         }
      return valor;
     }
-
-    
+        
     public void NuevePorNueve(){
         int height= ImgTemp.getHeight(); 
         int width= ImgTemp.getWidth();
