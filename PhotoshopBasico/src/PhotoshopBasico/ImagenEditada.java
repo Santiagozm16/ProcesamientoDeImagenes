@@ -651,21 +651,26 @@ public class ImagenEditada {
     
     }
     
-    public void TresPorTres(int pos1, int pos2, int pos3){
+    public void TresPorTres(double pos1, double pos2, double pos3, double pos4, double pos5, double pos6, double pos7, double pos8, double pos9){
         double filtro [][] = new double [3][3];
         filtro[0][0] = pos1;//Entrada teclado
         filtro[0][1] = pos2;//Entrada teclado
         filtro[0][2] = pos3;//Entrada teclado
-        filtro[1][0] = pos2;//Entrada teclado
-        filtro[1][1] = filtro[0][1]*filtro[1][0];
-        filtro[1][2] = filtro[1][0]*filtro[0][2];
-        filtro[2][0] = pos1;//Entrada teclado
-        filtro[2][1] = filtro[2][0]*filtro[0][1];
-        filtro[2][2] = filtro[2][0]*filtro[2][2];
+        filtro[1][0] = pos4;//Entrada teclado
+        filtro[1][1] = pos5;
+        filtro[1][2] = pos6;
+        filtro[2][0] = pos7;//Entrada teclado
+        filtro[2][1] = pos8;
+        filtro[2][2] = pos9;
         
-        int divisor = (int)(filtro[0][0]+filtro[0][1]+filtro[0][2]);
-        divisor = divisor*divisor;
+        double divisor = 0;
         
+        for(int i = 0; i<filtro.length;i++){
+            for(int j = 0; j<filtro[0].length; j++){
+                divisor = divisor + filtro[i][j];
+            }
+        }
+      
         for(int i = 0; i<filtro.length;i++){
             for(int j = 0; j<filtro[0].length; j++){
                 filtro[i][j] = filtro[i][j]/divisor;
