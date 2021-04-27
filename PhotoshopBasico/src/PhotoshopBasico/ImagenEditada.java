@@ -670,7 +670,10 @@ public class ImagenEditada {
                 divisor = divisor + filtro[i][j];
             }
         }
-      
+        
+        if(divisor == 0){
+            divisor = 1;
+        }
         for(int i = 0; i<filtro.length;i++){
             for(int j = 0; j<filtro[0].length; j++){
                 filtro[i][j] = filtro[i][j]/divisor;
